@@ -1,5 +1,5 @@
 FROM debian:bullseye
-
+#FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND=noninteractive
 
 SHELL ["/bin/bash", "-c"]
@@ -8,21 +8,21 @@ WORKDIR /
 
 ARG ARCH="arm64"
 
-ARG TARGET_DEPS="libavahi-client-dev:${ARCH}=0.8-5* libssl-dev:${ARCH}=1.1.1w-0* libsystemd-dev:${ARCH}=247.3-7* libwrap0-dev:${ARCH}=7.6.q-31 uthash-dev:${ARCH}=2.1.0-1 \
-  libsqlite3-dev:${ARCH}=3.34.1-3 libedit-dev:${ARCH}=3.1-20191231-2+b1 libyaml-cpp0.6:${ARCH}=0.6.3-9 libmosquitto-dev:${ARCH}=2.0.11-1\
+ARG TARGET_DEPS="libavahi-client-dev:${ARCH}=0.8-5* libssl-dev:${ARCH}=1.1.1w-0+deb11u1* libsystemd-dev:${ARCH}=247.3-7* libwrap0-dev:${ARCH}=7.6.q-31 uthash-dev:${ARCH}=2.1.0-1 \
+  libsqlite3-dev:${ARCH}=3.34.1-3 libedit-dev:${ARCH}=3.1-20191231-2+b1 libyaml-cpp0.6:${ARCH}=0.6.3-9 libmosquitto-dev:${ARCH}=2.0.11-1+deb11u1\
   libreadline-dev:${ARCH}=8.1-1 libncurses5-dev:${ARCH}=6.2+20201114-2+deb11u2 libncursesw5-dev:${ARCH}=6.2+20201114-2+deb11u2 libyaml-cpp-dev:${ARCH}=0.6.3-9 \
   libboost-atomic-dev:${ARCH}=1.74.0.3 libboost-chrono-dev:${ARCH}=1.74.0.3 libboost-date-time-dev:${ARCH}=1.74.0.3 \
   libboost-filesystem-dev:${ARCH}=1.74.0.3 libboost-regex-dev:${ARCH}=1.74.0.3 libboost-program-options-dev:${ARCH}=1.74.0.3 \
   libboost-serialization-dev:${ARCH}=1.74.0.3 libboost-system-dev:${ARCH}=1.74.0.3 libboost-thread-dev:${ARCH}=1.74.0.3 \
-  libboost-log-dev:${ARCH}=1.74.0.3 procps:${ARCH}=2:3.3.17-5 libmbedtls-dev:${ARCH}=2.16.9-0.1 libglib2.0-dev:${ARCH}=2.66.8-1"
-
+  libboost-log-dev:${ARCH}=1.74.0.3 procps:${ARCH}=2:3.3.17-5 libmbedtls-dev:${ARCH}=2.16.9-0.1 libglib2.0-dev:${ARCH}=2.66.8-1+deb11u1"
+  
 ARG HOST_DEPS="ninja-build=1.10.1-1 git=1:2.30.2-1* git-lfs=2.13.2-1+b5 \
   curl=7.74.0-1.3* pkg-config=0.29.2-1 \
   ruby=1:2.7+2 ruby-dev=1:2.7+2 lcov=1.14-2 \
   gcc=4:10.2.1-1 g++=4:10.2.1-1 gdb-multiarch=10.1-1.7 \
   build-essential=12.9 \
   clang=1:11.0-51+nmu5 nlohmann-json3-dev=3.9.1-1 \
-  libdbus-glib-1-dev=0.110-6 libssl-dev=1.1.1w-0* \
+  libdbus-glib-1-dev=0.110-6 libssl-dev=1.1.1w-0+deb11u1 \
   libgirepository1.0-dev=1.66.1-1+b1 \
   fakeroot=1.25.3-1.1"
 
@@ -76,9 +76,3 @@ RUN curl https://sh.rustup.rs -sSf --output /tmp/sh.rustup.rs \
 ENV PATH="${CARGO_HOME}/bin:${PATH}"
 
 # Install cmake 3.21.6
-RUN curl -L https://github.com/Kitware/CMake/releases/download/v3.21.6/cmake-3.21.6-Linux-x86_64.sh --output /tmp/cmake-3.21.6-Linux-x86_64.sh \
-  && echo d460a33c42f248388a8f2249659ad2f5eab6854bebaf4f57c1df49ded404e593  /tmp/cmake-3.21.6-Linux-x86_64.sh > /tmp/cmake-3.21.6-Linux-x86_64.sh.sha256 \
-  && sha256sum -c /tmp/cmake-3.21.6-Linux-x86_64.sh.sha256 \
-  && chmod +x /tmp/cmake-3.21.6-Linux-x86_64.sh \
-  && /tmp/cmake-3.21.6-Linux-x86_64.sh --prefix=/usr/local --skip-license \
-  && rm /tmp/cmake*
